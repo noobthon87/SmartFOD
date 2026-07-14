@@ -19,7 +19,11 @@ def build_clearance_pdf(record: dict, before_path: str, after_path: str) -> byte
     buffer = io.BytesIO()
     doc = SimpleDocTemplate(buffer, pagesize=A4, topMargin=1.5 * cm, bottomMargin=1.5 * cm)
     styles = getSampleStyleSheet()
+    cell_style = styles["BodyText"]
     story = []
+
+    def cell(text: str) -> Paragraph:
+        return Paragraph(str(text), cell_style)
 
     story.append(Paragraph("FOD Clearance Record", styles["Title"]))
     story.append(Spacer(1, 0.5 * cm))
@@ -30,10 +34,10 @@ def build_clearance_pdf(record: dict, before_path: str, after_path: str) -> byte
 
     meta_table = Table(
         [
-            ["Job Card #", record.get("job_card", "")],
-            ["Task Description", record.get("task_description", "")],
-            ["Technician", record.get("technician", "")],
-            ["Timestamp", record.get("timestamp", "")],
+            ["Job Card #", cell(record.get("job_card", ""))],
+            ["Task Description", cell(record.get("task_description", ""))],
+            ["Technician", cell(record.get("technician", ""))],
+            ["Timestamp", cell(record.get("timestamp", ""))],
             ["Status", status],
         ],
         colWidths=[4 * cm, 12 * cm],
@@ -62,8 +66,8 @@ def build_clearance_pdf(record: dict, before_path: str, after_path: str) -> byte
         story.append(Paragraph("Flagged Items", styles["Heading2"]))
         rows = [["Item", "Risk", "Location"]]
         for item in flagged_items:
-            rows.append([item.get("item", ""), item.get("risk", ""), item.get("location", "")])
-        items_table = Table(rows, colWidths=[7 * cm, 3 * cm, 6 * cm])
+            rows.append([cell(item.get("item", "")), cell(item.get("risk", "")), cell(item.get("location", ""))])
+        items_table = Table(rows, colWidths=[6 * cm, 2.5 * cm, 7.5 * cm])
         items_table.setStyle(
             TableStyle(
                 [
