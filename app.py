@@ -44,17 +44,13 @@ if page == "New Scan":
         task_description = st.text_input("Task Description")
 
     st.header("2. Before Photo")
-    before_file = st.camera_input("Photograph the work area BEFORE starting the task", key="before_cam")
-    if before_file is None:
-        before_file = st.file_uploader("...or upload a before photo", type=["jpg", "jpeg", "png"], key="before_upload")
+    before_file = st.file_uploader("Upload a before photo", type=["jpg", "jpeg", "png"], key="before_upload")
     if before_file is not None:
         st.session_state.before_image = before_file.getvalue()
         st.image(st.session_state.before_image, caption="Before", width=300)
 
     st.header("3. After Photo")
-    after_file = st.camera_input("Photograph the work area AFTER completing the task", key="after_cam")
-    if after_file is None:
-        after_file = st.file_uploader("...or upload an after photo", type=["jpg", "jpeg", "png"], key="after_upload")
+    after_file = st.file_uploader("Upload an after photo", type=["jpg", "jpeg", "png"], key="after_upload")
     if after_file is not None:
         st.session_state.after_image = after_file.getvalue()
         st.image(st.session_state.after_image, caption="After", width=300)
